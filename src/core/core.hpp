@@ -31,7 +31,6 @@ namespace vulkat{
 		// destructor
 		~Core();
 
-		// Start the game loop
 		void TestVulkan();
 		void Run();
 

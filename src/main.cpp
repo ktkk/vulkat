@@ -8,8 +8,12 @@ int main(int argc, char **argv){
 
 	// Create a new core object on the heap
 	Core* pCore{ new Core{ Window{ "WindowName", 1280.f, 720.f } } };
+
+	pCore->TestVulkan(); // Print the number of extensions supported
 	pCore->Run(); // Run the game loop
+
 	delete pCore;
+
 
 	return 0;
 }
