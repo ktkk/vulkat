@@ -19,10 +19,10 @@ namespace vulkat{
 		std::cout << extensionCount << " extensions supported!\n";
 	}
 
-	void Run() {
-		// while(!glfwWindowShouldClose(m_pWindow)) {
-		// 	glfwPollEvents();
-		// }
+	void Core::Run() {
+		while(!glfwWindowShouldClose(m_pWindow)) {
+			glfwPollEvents();
+		}
 	}
 
 	void Core::Initialize() {
