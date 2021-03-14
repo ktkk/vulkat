@@ -15,7 +15,6 @@ int main(int argc, char **argv){
 	Core* pCore{ new Core{ Window{ "WindowName", 1280.f, 720.f } } };
 
 	try {
-		pCore->TestVulkan(); // Print the number of extensions supported
 		pCore->Run(); // Run the game loop
 	} catch (const std::exception& e) {
 		std::cerr << "Exception caught: '" << e.what() << "'/n";
