@@ -23,12 +23,6 @@ namespace vulkat{
 		while(!glfwWindowShouldClose(m_pWindow)) {
 			glfwPollEvents();
 		}
-		// TODO
-		/*
-		- Start the game loop here
-
-		*/
-
 	}
 
 	void Core::Initialize() {
