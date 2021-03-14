@@ -17,6 +17,12 @@
 // std
 #include <iostream>
 
+// vulkat
+#define ENGINE "vulkat"
+#define VERSION_MAJOR 0
+#define VERSION_MINOR 1
+#define VERSION_PATCH 1
+
 namespace vulkat{
 	class Core final {
 	public:
@@ -31,16 +37,18 @@ namespace vulkat{
 		// destructor
 		~Core();
 
-		void TestVulkan();
 		void Run();
 
 	private:
 		// DATA MEMBERS
 		const Window m_Window; // Window properties
-		GLFWwindow* m_pWindow;
+		GLFWwindow* m_pWindow; // Window to render to
+		VkInstance m_pInstance; // Vulkan Instance (is pointer)
 
 		// MEMBER FUNCTIONS
 		void Initialize();
+		void CreateInstance();
+		void TestVulkanExtensions() const;
 		void Cleanup();
 	};
 }
