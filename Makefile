@@ -1,28 +1,26 @@
 CC = gcc
-CFLAGS = -std=c++17 -O2 -xc++
+CPPFLAGS = -std=c++17 -O2 -xc++
 LDFLAGS = -lglfw -lvulkan -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi -lstdc++ -shared-libgcc
 
+BUILD_DIR = build
+SRC_DIR = src
+
 OUTPUT = vulkat
-OBJS = main.o core.o window.o
 
-all: $(OUTPUT)
+SRCS = $(shell find $(SRC_DIR) -name *.cpp)
+OBJS = $(SRCS:%.cpp=$(BUILD_DIR)/%.o)
 
-$(OUTPUT): $(OBJS)
-	$(CC) -o $@ $(OBJS) $(LDFLAGS)
+$(BUILD_DIR)/$(OUTPUT): $(OBJS)
+	$(CC) $(OBJS) -o $@ $(LDFLAGS)
 
-main.o: $(shell find -type f -name "main.cpp")
-	$(CC) $(CFLAGS) -c $(shell find -type f -name "main.cpp")
-
-core.o: $(shell find -type f -name "core.cpp") $(shell find -type f -name "core.hpp")
-	$(CC) $(CFLAGS) -c $(shell find -type f -name "core.cpp")
-
-window.o: $(shell find -type f -name "window.cpp") $(shell find -type f -name "window.hpp")
-	$(CC) $(CFLAGS) -c $(shell find -type f -name "window.cpp")
+$(BUILD_DIR)/%.o: %.cpp
+	mkdir -p $(dir $@)
+	$(CC) $(CPPFLAGS) -c $< -o $@
 
 .PHONY: test clean
 
-test: $(OUTPUT)
-	./$(OUTPUT)
+test: $(BUILD_DIR)/$(OUTPUT)
+	$<
 
 clean:
-	rm -f *.o $(OUTPUT)
+	rm -rf $(BUILD_DIR)
