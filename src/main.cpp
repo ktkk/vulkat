@@ -1,6 +1,7 @@
 #include <ctime>
 
 #include <iostream>
+#include <stdexcept>
 #include <cstdlib>
 
 #include "core/core.hpp"
