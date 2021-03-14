@@ -80,7 +80,6 @@ namespace vulkat{
 		}
 	}
 
-
 	void Core::Cleanup() {
 		vkDestroyInstance(m_pInstance, nullptr);
 
