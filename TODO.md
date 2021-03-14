@@ -7,4 +7,4 @@
 - Start the game loop
 
 ### core.hpp
-- Put includes in pch
+- ~~Put includes in pch~~ (not needed **yet**)
