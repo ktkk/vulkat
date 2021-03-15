@@ -1,7 +1,7 @@
 ## TODO
 ### main.cpp
 - Memory leak detection
-- getopts()
+- ~~getopts()~~
 
 ### core.cpp
 [vulkan tutorial](https://vulkan-tutorial.com)
