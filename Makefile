@@ -24,7 +24,7 @@ $(PCH): $(PCH_HEADER)
 $(BUILD_DIR)/%.o: %.cpp $(PCH)
 	@tput setaf 1; echo "\tBuilding source files" && tput sgr0
 	mkdir -p $(dir $@)
-	$(CC) $(CPPFLAGS) -include $(PCH_HEADER) -c $< -o $@ $(LDFLAGS)
+	$(CC) $(CPPFLAGS) -include $(PCH_HEADER) -c $< -o $@
 
 .PHONY: test clean
 
