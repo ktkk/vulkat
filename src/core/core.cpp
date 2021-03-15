@@ -3,8 +3,9 @@
 #include "core.hpp"
 
 namespace vulkat{
-	Core::Core(const Window& window)
+	Core::Core(const Window& window, bool debug)
 		: m_Window{ window }
+		, m_Debug{ debug }
 		, m_pWindow{ nullptr }
 	{
 		Initialize();
@@ -62,7 +63,9 @@ namespace vulkat{
 			throw std::runtime_error("Failed to create VK instance!\n");
 		}
 
-		TestVulkanExtensions();
+		if(m_Debug){
+			TestVulkanExtensions();
+		}
 	}
 
 	void Core::TestVulkanExtensions() const {

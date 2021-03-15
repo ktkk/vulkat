@@ -20,7 +20,7 @@ $(BUILD_DIR)/%.o: %.cpp
 .PHONY: test clean
 
 test: $(BUILD_DIR)/$(OUTPUT)
-	$<
+	$< -d
 
 clean:
 	rm -rf $(BUILD_DIR)

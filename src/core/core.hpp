@@ -26,7 +26,7 @@
 namespace vulkat{
 	class Core final {
 	public:
-		explicit Core(const Window& window);
+		explicit Core(const Window& window, bool debug);
 		
 		// Disallow copy
 		Core(const Core& other) = delete;
@@ -42,6 +42,8 @@ namespace vulkat{
 	private:
 		// DATA MEMBERS
 		const Window m_Window; // Window properties
+		bool m_Debug;
+
 		GLFWwindow* m_pWindow; // Window to render to
 		VkInstance m_pInstance; // Vulkan Instance (is pointer)
 
