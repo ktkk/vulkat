@@ -11,17 +11,20 @@ SRCS = $(shell find $(SRC_DIR) -name *.cpp)
 OBJS = $(SRCS:%.cpp=$(BUILD_DIR)/%.o)
 
 PCH_HEADER = $(SRC_DIR)/pch.hpp
-PCH = $(shell find $(SRC_DIR) -name *.gch)
+PCH = $(PCH_HEADER).gch
 
-$(BUILD_DIR)/$(OUTPUT): $(OBJS) $(PCH)
+$(BUILD_DIR)/$(OUTPUT): $(OBJS)
+	@tput setaf 1; echo "\tBuilding output" && tput sgr0
 	$(CC) $(OBJS) -o $@ $(LDFLAGS)
 
-$(BUILD_DIR)/%.o: %.cpp
-	mkdir -p $(dir $@)
+$(PCH): $(PCH_HEADER)
+	@tput setaf 1; echo "\tBuilding precompiled header" && tput sgr0
 	$(CC) $(CPPFLAGS) -c $< -o $@
 
-$(PCH): $(PCH_HEADER)
-	$(CC) $(CPPFLAGS) -c $< -o $@
+$(BUILD_DIR)/%.o: %.cpp $(PCH)
+	@tput setaf 1; echo "\tBuilding source files" && tput sgr0
+	mkdir -p $(dir $@)
+	$(CC) $(CPPFLAGS) -include $(PCH_HEADER) -c $< -o $@
 
 .PHONY: test clean
 
