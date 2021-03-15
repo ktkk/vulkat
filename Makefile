@@ -10,11 +10,17 @@ OUTPUT = vulkat
 SRCS = $(shell find $(SRC_DIR) -name *.cpp)
 OBJS = $(SRCS:%.cpp=$(BUILD_DIR)/%.o)
 
-$(BUILD_DIR)/$(OUTPUT): $(OBJS)
+PCH_HEADER = $(SRC_DIR)/pch.hpp
+PCH = $(shell find $(SRC_DIR) -name *.gch)
+
+$(BUILD_DIR)/$(OUTPUT): $(OBJS) $(PCH)
 	$(CC) $(OBJS) -o $@ $(LDFLAGS)
 
 $(BUILD_DIR)/%.o: %.cpp
 	mkdir -p $(dir $@)
+	$(CC) $(CPPFLAGS) -c $< -o $@
+
+$(PCH): $(PCH_HEADER)
 	$(CC) $(CPPFLAGS) -c $< -o $@
 
 .PHONY: test clean
