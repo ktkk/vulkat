@@ -1,5 +1,4 @@
-#include <vector>
-
+#include "../pch.hpp"
 #include "core.hpp"
 
 namespace vulkat{
@@ -34,6 +33,7 @@ namespace vulkat{
 				nullptr, // not fullscreen
 				nullptr ); // don't share resources with other windows (opengl only)
 
+		// Create a vulkan instance
 		CreateInstance();
 	}
 
@@ -63,7 +63,7 @@ namespace vulkat{
 			throw std::runtime_error("Failed to create VK instance!\n");
 		}
 
-		if(m_Debug){
+		if(m_Debug){ // If debug flag is specified, print the extensions
 			TestVulkanExtensions();
 		}
 	}

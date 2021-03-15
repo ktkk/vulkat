@@ -16,7 +16,7 @@
 - ...
 
 ### core.hpp
-- ~~Put includes in pch~~ (not needed **yet**)
+- ~~Put includes in pch~~
 
 ### game/game.cpp
 - Write game loop helper class
