@@ -14,15 +14,15 @@ PCH_HEADER = $(SRC_DIR)/pch.hpp
 PCH = $(PCH_HEADER).gch
 
 $(BUILD_DIR)/$(OUTPUT): $(OBJS)
-	@tput setaf 1; echo "\tBuilding output" && tput sgr0
+	@tput setaf 1; echo -e "\tBuilding output" && tput sgr0
 	$(CC) $(OBJS) -o $@ $(LDFLAGS)
 
 $(PCH): $(PCH_HEADER)
-	@tput setaf 1; echo "\tBuilding precompiled header" && tput sgr0
+	@tput setaf 1; echo -e "\tBuilding precompiled header" && tput sgr0
 	$(CC) $(CPPFLAGS) -c $< -o $@
 
 $(BUILD_DIR)/%.o: %.cpp $(PCH)
-	@tput setaf 1; echo "\tBuilding source files" && tput sgr0
+	@tput setaf 1; echo -e "\tBuilding source files" && tput sgr0
 	mkdir -p $(dir $@)
 	$(CC) $(CPPFLAGS) -include $(PCH_HEADER) -c $< -o $@
 
