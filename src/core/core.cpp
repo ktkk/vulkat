@@ -6,6 +6,7 @@ namespace vulkat{
 		: m_Window{ window }
 		, m_Debug{ debug }
 		, m_pWindow{ nullptr }
+		, m_Validation{}
 	{
 		Initialize();
 	}
@@ -38,6 +39,10 @@ namespace vulkat{
 	}
 
 	void Core::CreateInstance() {
+		if (m_Debug && !m_Validation.CheckValidationLayerSupport()) {
+			throw std::runtime_error("Validation layer requested, but none available!");
+		}
+
 		// Optional: Info about the app
 		VkApplicationInfo appInfo{}; // pNext gets initialized to nullptr
 		appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;

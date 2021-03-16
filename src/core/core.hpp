@@ -4,6 +4,9 @@
 // Window
 #include "window.hpp"
 
+// Validation Layers
+#include "validation.hpp"
+
 // vulkat
 #define ENGINE "vulkat"
 #define VERSION_MAJOR 0
@@ -33,6 +36,7 @@ namespace vulkat{
 
 		GLFWwindow* m_pWindow; // Window to render to
 		VkInstance m_pInstance; // Vulkan Instance (is pointer)
+		Validation m_Validation; // Validation layer check wrapper object
 
 		// MEMBER FUNCTIONS
 		void Initialize();
