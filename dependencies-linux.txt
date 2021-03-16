@@ -1,4 +1,5 @@
 vulkan-tools
 vulkan-headers
+vulkan-validation-layers
 glfw-x11
 glm
