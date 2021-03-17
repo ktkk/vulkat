@@ -3,6 +3,8 @@
 #include "validation.hpp"
 
 namespace vulkat {
+	const std::vector<const char*> Validation::m_ValidationLayers{ "VK_LAYER_KHRONOS_validation" };
+
 	bool Validation::CheckValidationLayerSupport() {
 		uint32_t layerCount;
 		vkEnumerateInstanceLayerProperties(&layerCount, nullptr);

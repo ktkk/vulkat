@@ -4,10 +4,10 @@
 namespace vulkat {
 	class Validation final {
 	public:
-		bool CheckValidationLayerSupport();
+		static bool CheckValidationLayerSupport();
 	
 	private:
-		const std::vector<const char*> m_ValidationLayers{ "VK_LAYER_KHRONOS_validation" };
+		static const std::vector<const char*> m_ValidationLayers;
 	};
 }
 #endif // VALIDATION_HPP

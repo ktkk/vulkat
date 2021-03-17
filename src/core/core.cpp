@@ -6,7 +6,6 @@ namespace vulkat{
 		: m_Window{ window }
 		, m_Debug{ debug }
 		, m_pWindow{ nullptr }
-		, m_Validation{}
 	{
 		Initialize();
 	}
@@ -39,7 +38,7 @@ namespace vulkat{
 	}
 
 	void Core::CreateInstance() {
-		if (m_Debug && !m_Validation.CheckValidationLayerSupport()) {
+		if (m_Debug && !Validation::CheckValidationLayerSupport()) {
 			throw std::runtime_error("Validation layer requested, but none available!");
 		}
 
