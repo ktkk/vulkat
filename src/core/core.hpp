@@ -19,10 +19,10 @@ namespace vulkat{
 		explicit Core(const Window& window, bool debug);
 		
 		// Disallow copy
-		Core(const Core& other) = delete;
-		Core(Core&& other) = delete;
-		Core& operator=(const Core& other) = delete;
-		Core& operator=(Core&& other) = delete;
+		Core(const Core& other) = delete; // Copy constructor
+		Core(Core&& other) = delete; // Move constructor
+		Core& operator=(const Core& other) = delete; // Copy assignment
+		Core& operator=(Core&& other) = delete; // Move assignment
 
 		// destructor
 		~Core();
@@ -36,12 +36,22 @@ namespace vulkat{
 
 		GLFWwindow* m_pWindow; // Window to render to
 		VkInstance m_pInstance; // Vulkan Instance (is pointer)
+		VkDebugUtilsMessengerEXT m_DebugMessenger;
 
 		// MEMBER FUNCTIONS
 		void Initialize();
 		void CreateInstance();
-		void TestVulkanExtensions() const;
 		void Cleanup();
+
+		// Vulkan Extension & Validation layer checks
+		void PrintVulkanExtensions() const;
+		std::vector<const char*> GetRequiredExtensions();
+		static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
+			VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+			VkDebugUtilsMessageTypeFlagsEXT messageType,
+			const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
+			void* pUserData);
+		void SetupDebugMessenger();
 	};
 }
 #endif // CORE_HPP
