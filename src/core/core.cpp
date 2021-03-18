@@ -2,6 +2,21 @@
 #include "core.hpp"
 
 namespace vulkat{
+	// CreateDebugUtilsMessengerEXT Proxy function (GLOBAL FUNCTION, maybe throw this in wrapper class "Validation")
+	VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfo* pCreateInfo,
+					      const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT pDebugMessenger) {
+		// Look for the address of the function
+		auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
+	
+		// if the function exists, return it, otherwise throw an error
+		if (func) {
+			return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
+		}
+		else {
+			return VK_ERROR_EXTENTION_NOT_PRESENT;
+		}
+	}
+
 	Core::Core(const Window& window, bool debug)
 		: m_Window{ window }
 		, m_Debug{ debug }
@@ -172,5 +187,10 @@ namespace vulkat{
 		createInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
 		createInfo.pfnUserCallback = DebugCallback;
 		createInfo.pUserData = nullptr; // Optional
+		
+		// Initialize the debug messenger
+		if (CreateDebugUtilsMessengerEXT(m_Instance, &createInfo, nullptr, m_DebugMessenger) != VK_SUCCESS) {
+			throw std::runtime_error("Failed to set up debug messenger!");
+		}
 	}
 }
