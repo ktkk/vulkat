@@ -15,6 +15,7 @@ namespace vulkat {
 		for (const char* layerName : m_ValidationLayers) {
 			bool layerFound{false};
 
+			// Loop over the layers and check if they're available
 			for (const auto& layerProperties : availableLayers) {
 				if (strcmp(layerName, layerProperties.layerName) == 0) {
 					layerFound = true;
@@ -22,6 +23,7 @@ namespace vulkat {
 				}
 			}
 
+			// If any of the layers aren't found, return false
 			if (!layerFound) {
 				return false;
 			}
