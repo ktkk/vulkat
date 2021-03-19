@@ -3,8 +3,8 @@
 
 namespace vulkat{
 	// CreateDebugUtilsMessengerEXT Proxy function (GLOBAL FUNCTION, maybe throw this in wrapper class "Validation")
-	VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfo* pCreateInfo,
-					      const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT pDebugMessenger) {
+	VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
+					      const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger) {
 		// Look for the address of the function
 		auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
 	
@@ -13,7 +13,19 @@ namespace vulkat{
 			return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
 		}
 		else {
-			return VK_ERROR_EXTENTION_NOT_PRESENT;
+			return VK_ERROR_EXTENSION_NOT_PRESENT;
+		}
+	}
+
+	// DestroyDebugUtilsMessengerEXT Proxy function (GLOBAL FUNCTION, maybe throw in wrapper class "Validation")
+	void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger,
+			const VkAllocationCallbacks* pAllocator) {
+		// Look for the address of the function
+		auto func = (PFN_vkDestroyDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
+
+		// if the function exists, return it
+		if (func) {
+			func(instance, debugMessenger, pAllocator);
 		}
 	}
 
@@ -82,12 +94,19 @@ namespace vulkat{
 		auto extensions = GetRequiredExtensions();
 		createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
 		createInfo.ppEnabledExtensionNames = extensions.data();
+
+		VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo;
 		if (m_Debug) {
 			createInfo.enabledLayerCount = static_cast<uint32_t>(Validation::m_ValidationLayers.size());
 			createInfo.ppEnabledLayerNames = Validation::m_ValidationLayers.data();
+
+			PopulateDebugMessengerCreateInfo(debugCreateInfo);
+			createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*) &debugCreateInfo;
 		}
 		else {
 			createInfo.enabledLayerCount = 0;
+
+			createInfo.pNext = nullptr;
 		}
 		// END CREATEINFO
 
@@ -103,12 +122,17 @@ namespace vulkat{
 	}
 
 	void Core::Cleanup() {
+		if (m_Debug) {
+			DestroyDebugUtilsMessengerEXT(m_pInstance, m_DebugMessenger, nullptr);
+		}
+
 		vkDestroyInstance(m_pInstance, nullptr);
 
 		glfwDestroyWindow(m_pWindow);
 		glfwTerminate();
 	}
 
+	// Extension support
 	void Core::PrintVulkanExtensions() const {
 		// Print nr of extensions and their names to the console
 		uint32_t extensionCount{ 0 };
@@ -142,6 +166,7 @@ namespace vulkat{
 		return extensions;
 	}
 
+	// Debugger
 	VKAPI_ATTR VkBool32 VKAPI_CALL Core::DebugCallback(
 			VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
 			VkDebugUtilsMessageTypeFlagsEXT messageType,
@@ -177,19 +202,23 @@ namespace vulkat{
 		// pUserData: allows for passing of own data
 	}
 
-	void Core::SetupDebugMessenger() {
-		if(!m_Debug) return;
-
-		VkDebugUtilsMessengerCreateInfoEXT createInfo{};
+	void Core::PopulateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo) {
+		createInfo = {};
 
 		createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
 		createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
 		createInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
 		createInfo.pfnUserCallback = DebugCallback;
-		createInfo.pUserData = nullptr; // Optional
-		
+	}
+
+	void Core::SetupDebugMessenger() {
+		if(!m_Debug) return;
+
+		VkDebugUtilsMessengerCreateInfoEXT createInfo{};
+		PopulateDebugMessengerCreateInfo(createInfo);
+
 		// Initialize the debug messenger
-		if (CreateDebugUtilsMessengerEXT(m_Instance, &createInfo, nullptr, m_DebugMessenger) != VK_SUCCESS) {
+		if (CreateDebugUtilsMessengerEXT(m_pInstance, &createInfo, nullptr, &m_DebugMessenger) != VK_SUCCESS) {
 			throw std::runtime_error("Failed to set up debug messenger!");
 		}
 	}
