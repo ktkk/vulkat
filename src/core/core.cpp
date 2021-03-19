@@ -33,6 +33,8 @@ namespace vulkat{
 		: m_Window{ window }
 		, m_Debug{ debug }
 		, m_pWindow{ nullptr }
+		, m_pInstance{ nullptr }
+		, m_pDebugMessenger{ nullptr }
 	{
 		Initialize();
 	}
@@ -123,7 +125,7 @@ namespace vulkat{
 
 	void Core::Cleanup() {
 		if (m_Debug) {
-			debug::DestroyDebugUtilsMessengerEXT(m_pInstance, m_DebugMessenger, nullptr);
+			debug::DestroyDebugUtilsMessengerEXT(m_pInstance, m_pDebugMessenger, nullptr);
 		}
 
 		vkDestroyInstance(m_pInstance, nullptr);
@@ -218,7 +220,7 @@ namespace vulkat{
 		PopulateDebugMessengerCreateInfo(createInfo);
 
 		// Initialize the debug messenger
-		if (debug::CreateDebugUtilsMessengerEXT(m_pInstance, &createInfo, nullptr, &m_DebugMessenger) != VK_SUCCESS) {
+		if (debug::CreateDebugUtilsMessengerEXT(m_pInstance, &createInfo, nullptr, &m_pDebugMessenger) != VK_SUCCESS) {
 			throw std::runtime_error("Failed to set up debug messenger!");
 		}
 	}
