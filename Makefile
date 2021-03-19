@@ -1,5 +1,5 @@
 CC = gcc
-CPPFLAGS = -std=c++17 -O2 -xc++
+CPPFLAGS = -std=c++17 -O2 -xc++ -g
 LDFLAGS = -lglfw -lvulkan -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi -lstdc++ -shared-libgcc
 
 BUILD_DIR = build
