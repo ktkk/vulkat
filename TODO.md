@@ -1,6 +1,6 @@
 ## TODO
 ### main.cpp
-- Memory leak detection
+- ~~Memory leak detection~~ (Validation Layers)
 - ~~getopts()~~
 
 ### core.cpp
@@ -20,3 +20,6 @@
 
 ### game/game.cpp
 - Write game loop helper class
+
+### structs/structs.hpp
+- Put all common used structs in a separate file
