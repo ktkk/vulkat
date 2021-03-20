@@ -35,6 +35,7 @@ namespace vulkat{
 		, m_pWindow{ nullptr }
 		, m_pInstance{ nullptr }
 		, m_pDebugMessenger{ nullptr }
+		, m_PhysicalDevice{ VK_NULL_HANDLE }
 	{
 		Initialize();
 	}
@@ -222,6 +223,15 @@ namespace vulkat{
 		// Initialize the debug messenger
 		if (debug::CreateDebugUtilsMessengerEXT(m_pInstance, &createInfo, nullptr, &m_pDebugMessenger) != VK_SUCCESS) {
 			throw std::runtime_error("Failed to set up debug messenger!");
+		}
+	}
+
+	void PickPhysicalDevice() {
+		uint32_t deviceCount{0};
+		vkEnumeratePhysicalDevices(m_pInstance, &deviceCount, nullptr);
+
+		if (deviceCount <= 0) {
+			throw std::runtime_error("No GPUs with Vulkan support found!");
 		}
 	}
 }

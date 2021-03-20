@@ -37,6 +37,7 @@ namespace vulkat{
 		GLFWwindow* m_pWindow; // Window to render to
 		VkInstance m_pInstance; // Vulkan Instance (is pointer)
 		VkDebugUtilsMessengerEXT m_pDebugMessenger; // Debug Messenger (is pointer)
+		VkPhysicalDevice m_PhysicalDevice;
 
 		// MEMBER FUNCTIONS
 		void Initialize();
@@ -53,6 +54,7 @@ namespace vulkat{
 			void* pUserData);
 		void PopulateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
 		void SetupDebugMessenger();
+		void PickPhysicalDevice();
 	};
 }
 #endif // CORE_HPP
