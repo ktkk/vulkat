@@ -5,8 +5,6 @@ namespace vulkat {
 	class Validation final {
 	public:
 		static bool CheckValidationLayerSupport();
-	
-	private:
 		static const std::vector<const char*> m_ValidationLayers;
 	};
 }
