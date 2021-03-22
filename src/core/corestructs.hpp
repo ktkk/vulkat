@@ -1,5 +1,5 @@
-#ifndef WINDOW_HPP
-#define WINDOW_HPP
+#ifndef CORESTRUCTS_HPP
+#define CORESTRUCTS_HPP
 
 namespace vulkat{
 	struct Window{
@@ -10,4 +10,4 @@ namespace vulkat{
 		bool isVsyncOn;
 	};
 }
-#endif // WINDOW_HPP
+#endif // CORESTRUCTS_HPP

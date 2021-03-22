@@ -1,8 +1,8 @@
 #ifndef CORE_HPP
 #define CORE_HPP
 
-// Window
-#include "window.hpp"
+// Corestructs
+#include "corestructs.hpp"
 
 // Validation Layers
 #include "validation.hpp"

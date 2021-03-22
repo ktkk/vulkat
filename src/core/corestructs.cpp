@@ -1,5 +1,5 @@
 #include "../pch.hpp"
-#include "window.hpp"
+#include "corestructs.hpp"
 
 namespace vulkat{
 	Window::Window(const std::string& title, float width, float height, bool isVsyncOn)
