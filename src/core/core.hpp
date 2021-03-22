@@ -60,7 +60,7 @@ namespace vulkat{
 		// Physical devices and Queue families
 		void PickPhysicalDevice();
 		bool IsDeviceSuitable(VkPhysicalDevice device);
-		uint32_t FindQueueFamilies(VkPhysicalDevice device);
+		QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);
 	};
 }
 #endif // CORE_HPP

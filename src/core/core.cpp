@@ -259,13 +259,37 @@ namespace vulkat{
 	}
 
 	bool Core::IsDeviceSuitable(VkPhysicalDevice device) {
-		return true;
+		QueueFamilyIndices indices = FindQueueFamilies(device);
+
+		return indices.IsComplete();
 
 		// Could be extended to fall back on iGPU
 		// Or select based on features
 	}
 
-	uint32_t Core::FindQueueFamilies(VkPhysicalDevice device) {
+	QueueFamilyIndices Core::FindQueueFamilies(VkPhysicalDevice device) {
+		QueueFamilyIndices indices;
 
+		uint32_t queueFamilyCount = 0;
+		vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
+
+		std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
+		vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
+
+		// Find a queue family that supports VK_QUEUE_GRAPHICS_BIT
+		int i{0};
+		for (const auto& queueFamily : queueFamilies) {
+			if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
+				indices.graphicsFamily = i;
+			}
+
+			if (indices.IsComplete()) {
+				break;
+			}
+
+			++i;
+		}
+
+		return indices;
 	}
 }

@@ -8,4 +8,8 @@ namespace vulkat{
 		, height{ height }
 		, isVsyncOn{ isVsyncOn }
 	{}
+
+	bool QueueFamilyIndices::IsComplete() {
+		return graphicsFamily.has_value();
+	}
 }
