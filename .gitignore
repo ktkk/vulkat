@@ -3,3 +3,4 @@
 
 # Ignore Precompiled Header
 /src/*.pch
+/src/*.gch
