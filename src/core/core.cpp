@@ -66,6 +66,7 @@ namespace vulkat{
 		// Create a vulkan instance
 		CreateInstance();
 		SetupDebugMessenger();
+		PickPhysicalDevice();
 	}
 
 	void Core::CreateInstance() {
@@ -250,10 +251,21 @@ namespace vulkat{
 		if (m_PhysicalDevice == VK_NULL_HANDLE) {
 			throw std::runtime_error("Failed to find a suitable GPU");
 		}
+
+		// Print the chosen device
+		VkPhysicalDeviceProperties deviceProperties;
+		vkGetPhysicalDeviceProperties(m_PhysicalDevice, &deviceProperties);
+		std::cout << "Running on physical device: " << deviceProperties.deviceName << std::endl;
 	}
 
 	bool Core::IsDeviceSuitable(VkPhysicalDevice device) {
-		// (temporary)
 		return true;
+
+		// Could be extended to fall back on iGPU
+		// Or select based on features
+	}
+
+	uint32_t Core::FindQueueFamilies(VkPhysicalDevice device) {
+
 	}
 }

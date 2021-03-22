@@ -52,10 +52,15 @@ namespace vulkat{
 			VkDebugUtilsMessageTypeFlagsEXT messageType,
 			const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
 			void* pUserData);
+
+		// Debug messenger
 		void PopulateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
 		void SetupDebugMessenger();
+
+		// Physical devices and Queue families
 		void PickPhysicalDevice();
 		bool IsDeviceSuitable(VkPhysicalDevice device);
+		uint32_t FindQueueFamilies(VkPhysicalDevice device);
 	};
 }
 #endif // CORE_HPP
