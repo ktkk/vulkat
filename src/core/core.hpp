@@ -55,6 +55,7 @@ namespace vulkat{
 		void PopulateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
 		void SetupDebugMessenger();
 		void PickPhysicalDevice();
+		bool IsDeviceSuitable(VkPhysicalDevice device);
 	};
 }
 #endif // CORE_HPP

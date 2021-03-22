@@ -226,12 +226,34 @@ namespace vulkat{
 		}
 	}
 
-	void PickPhysicalDevice() {
+	void Core::PickPhysicalDevice() {
 		uint32_t deviceCount{0};
 		vkEnumeratePhysicalDevices(m_pInstance, &deviceCount, nullptr);
 
+		// If no device with vulkan support is found, throw error
 		if (deviceCount <= 0) {
 			throw std::runtime_error("No GPUs with Vulkan support found!");
 		}
+
+		// Array to hold devices
+		std::vector<VkPhysicalDevice> devices(deviceCount);
+		vkEnumeratePhysicalDevices(m_pInstance, &deviceCount, devices.data()); // fill the array
+
+		for (const auto& device : devices) {
+			if (IsDeviceSuitable(device)) {
+				m_PhysicalDevice = device;
+				break;
+			}
+		}
+
+		// If no suitable GPU is found, also throw an error
+		if (m_PhysicalDevice == VK_NULL_HANDLE) {
+			throw std::runtime_error("Failed to find a suitable GPU");
+		}
+	}
+
+	bool Core::IsDeviceSuitable(VkPhysicalDevice device) {
+		// (temporary)
+		return true;
 	}
 }
