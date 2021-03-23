@@ -334,5 +334,8 @@ namespace vulkat{
 		if (vkCreateDevice(m_PhysicalDevice, &createInfo, nullptr, &m_Device) != VK_SUCCESS) {
 			throw std::runtime_error("Failed to create logic device!");
 		}
+
+		// Store the device queue
+		vkGetDeviceQueue(m_Device, indices.graphicsFamily.value(), 0, &m_GraphicsQueue); // Only create single queue (0)
 	}
 }

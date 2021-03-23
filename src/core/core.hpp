@@ -37,8 +37,9 @@ namespace vulkat{
 		GLFWwindow* m_pWindow; // Window to render to
 		VkInstance m_pInstance; // Vulkan Instance (is pointer)
 		VkDebugUtilsMessengerEXT m_pDebugMessenger; // Debug Messenger (is pointer)
-		VkPhysicalDevice m_PhysicalDevice;
-		VkDevice m_Device;
+		VkPhysicalDevice m_PhysicalDevice; // Physical device (the GPU)
+		VkDevice m_Device; // Logical device
+		VkQueue m_GraphicsQueue; // Handle to interact with graphics queue
 
 		// MEMBER FUNCTIONS
 		void Initialize();
