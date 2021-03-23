@@ -292,4 +292,30 @@ namespace vulkat{
 
 		return indices;
 	}
+
+	void Core::CreateLogicalDevice() {
+		QueueFamilyIndices indices = FindQueueFamilies(m_PhysicalDevice);
+
+		// Fill the queueCreateInfo struct
+		VkDeviceQueueCreateInfo queueCreateInfo{};
+
+		queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+		queueCreateInfo.queueFamilyIndex = indices.graphicsFamily.value();
+		queueCreateInfo.queueCount = 1;
+
+		// Set the priority of the queue
+		float queuePriority = 1.0f;
+		queueCreateInfo.pQueuePriorities = &queuePriority;
+
+		// Fill the deviceFeatures struct
+		VkPhysicalDeviceFeatures deviceFeatures{}; // No special features required
+
+		// Finally, fill the createInfo struct
+		VkDeviceCreateInfo createInfo{};
+
+		createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+		createInfo.pQueueCreateInfos = &queueCreateInfo; // Reference the queue create info struct
+		createInfo.queueCreateInfoCount = 1;
+		createInfo.pEnabledFeatures = &deviceFeatures; // Reference the device features struct
+	}
 }

@@ -38,6 +38,7 @@ namespace vulkat{
 		VkInstance m_pInstance; // Vulkan Instance (is pointer)
 		VkDebugUtilsMessengerEXT m_pDebugMessenger; // Debug Messenger (is pointer)
 		VkPhysicalDevice m_PhysicalDevice;
+		VkDevice m_Device;
 
 		// MEMBER FUNCTIONS
 		void Initialize();
@@ -61,6 +62,9 @@ namespace vulkat{
 		void PickPhysicalDevice();
 		bool IsDeviceSuitable(VkPhysicalDevice device);
 		QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);
+
+		// Logical devices
+		void CreateLogicalDevice();
 	};
 }
 #endif // CORE_HPP
