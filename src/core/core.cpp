@@ -67,6 +67,7 @@ namespace vulkat{
 		CreateInstance();
 		SetupDebugMessenger();
 		PickPhysicalDevice();
+		CreateLogicalDevice();
 	}
 
 	void Core::CreateInstance() {
@@ -126,6 +127,8 @@ namespace vulkat{
 	}
 
 	void Core::Cleanup() {
+		vkDestroyDevice(m_Device, nullptr);
+
 		if (m_Debug) {
 			debug::DestroyDebugUtilsMessengerEXT(m_pInstance, m_pDebugMessenger, nullptr);
 		}
@@ -317,5 +320,19 @@ namespace vulkat{
 		createInfo.pQueueCreateInfos = &queueCreateInfo; // Reference the queue create info struct
 		createInfo.queueCreateInfoCount = 1;
 		createInfo.pEnabledFeatures = &deviceFeatures; // Reference the device features struct
+		// Depricated but a good idea to add anyway
+		createInfo.enabledExtensionCount = 0; 
+		if (m_Debug) {
+			createInfo.enabledLayerCount = static_cast<uint32_t>(Validation::m_ValidationLayers.size());
+			createInfo.ppEnabledLayerNames = Validation::m_ValidationLayers.data();
+		}
+		else {
+			createInfo.enabledLayerCount = 0;
+		}
+
+		// Create the device
+		if (vkCreateDevice(m_PhysicalDevice, &createInfo, nullptr, &m_Device) != VK_SUCCESS) {
+			throw std::runtime_error("Failed to create logic device!");
+		}
 	}
 }
