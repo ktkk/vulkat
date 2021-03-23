@@ -8,8 +8,8 @@
 - ~~Base~~
 - ~~Creating instance~~
 - ~~Validation Layers~~
-- Physical devices and queue families
-- Logical device and queues
+- ~~Physical devices and queue families~~
+- ~~Logical device and queues~~
 - Draw to the window
 - Swap chain
 - Image views
