@@ -31,12 +31,13 @@ namespace vulkat{
 
 	private:
 		// DATA MEMBERS
-		const Window m_Window; // Window properties
+		const Window m_WindowProperties; // Window properties
 		bool m_Debug;
 
 		GLFWwindow* m_pWindow; // Window to render to
 		VkInstance m_pInstance; // Vulkan Instance (is pointer)
 		VkDebugUtilsMessengerEXT m_pDebugMessenger; // Debug Messenger (is pointer)
+		VkSurfaceKHR m_Surface; // Window Surface
 		VkPhysicalDevice m_PhysicalDevice; // Physical device (the GPU)
 		VkDevice m_Device; // Logical device
 		VkQueue m_GraphicsQueue; // Handle to interact with graphics queue
@@ -66,6 +67,9 @@ namespace vulkat{
 
 		// Logical devices
 		void CreateLogicalDevice();
+
+		// Window Surface
+		void CreateSurface();
 	};
 }
 #endif // CORE_HPP

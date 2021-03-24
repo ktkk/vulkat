@@ -30,7 +30,7 @@ namespace debug {
 
 namespace vulkat{
 	Core::Core(const Window& window, bool debug)
-		: m_Window{ window }
+		: m_WindowProperties{ window }
 		, m_Debug{ debug }
 		, m_pWindow{ nullptr }
 		, m_pInstance{ nullptr }
@@ -57,15 +57,16 @@ namespace vulkat{
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // disable resizing
 
 		m_pWindow = glfwCreateWindow(
-				m_Window.width,
-				m_Window.height,
-				m_Window.title.c_str(),
+				m_WindowProperties.width,
+				m_WindowProperties.height,
+				m_WindowProperties.title.c_str(),
 				nullptr, // not fullscreen
 				nullptr ); // don't share resources with other windows (opengl only)
 
 		// Create a vulkan instance
 		CreateInstance();
 		SetupDebugMessenger();
+		CreateSurface();
 		PickPhysicalDevice();
 		CreateLogicalDevice();
 	}
@@ -80,7 +81,7 @@ namespace vulkat{
 		// APPINFO
 		VkApplicationInfo appInfo{}; // pNext gets initialized to nullptr
 		appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-		appInfo.pApplicationName = m_Window.title.c_str();
+		appInfo.pApplicationName = m_WindowProperties.title.c_str();
 		appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
 		appInfo.pEngineName = ENGINE;
 		appInfo.engineVersion = VK_MAKE_VERSION(VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
@@ -133,6 +134,7 @@ namespace vulkat{
 			debug::DestroyDebugUtilsMessengerEXT(m_pInstance, m_pDebugMessenger, nullptr);
 		}
 
+		vkDestroySurfaceKHR(m_pInstance, m_Surface, nullptr);
 		vkDestroyInstance(m_pInstance, nullptr);
 
 		glfwDestroyWindow(m_pWindow);
@@ -337,5 +339,11 @@ namespace vulkat{
 
 		// Store the device queue
 		vkGetDeviceQueue(m_Device, indices.graphicsFamily.value(), 0, &m_GraphicsQueue); // Only create single queue (0)
+	}
+
+	void Core::CreateSurface() {
+		if (glfwCreateWindowSurface(m_pInstance, m_pWindow, nullptr, &m_Surface) != VK_SUCCESS) {
+			throw std::runtime_error("Failed to create window surface!");
+		}
 	}
 }
