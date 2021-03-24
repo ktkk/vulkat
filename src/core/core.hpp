@@ -41,6 +41,7 @@ namespace vulkat{
 		VkPhysicalDevice m_PhysicalDevice; // Physical device (the GPU)
 		VkDevice m_Device; // Logical device
 		VkQueue m_GraphicsQueue; // Handle to interact with graphics queue
+		VkQueue m_PresentQueue; // Handle to interact with the presentation queue
 
 		// MEMBER FUNCTIONS
 		void Initialize();

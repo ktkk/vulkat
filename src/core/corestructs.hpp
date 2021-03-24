@@ -14,6 +14,7 @@ namespace vulkat{
 
 	struct QueueFamilyIndices {
 		std::optional<uint32_t> graphicsFamily; // Allows for checking if a value is present
+		std::optional<uint32_t> presentFamily;
 
 		bool IsComplete();
 	};

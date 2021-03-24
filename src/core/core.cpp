@@ -1,4 +1,5 @@
 #include "../pch.hpp"
+#include <set>
 #include "core.hpp"
 
 namespace debug {
@@ -275,7 +276,7 @@ namespace vulkat{
 	QueueFamilyIndices Core::FindQueueFamilies(VkPhysicalDevice device) {
 		QueueFamilyIndices indices;
 
-		uint32_t queueFamilyCount = 0;
+		uint32_t queueFamilyCount{0};
 		vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
 
 		std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
@@ -286,6 +287,13 @@ namespace vulkat{
 		for (const auto& queueFamily : queueFamilies) {
 			if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
 				indices.graphicsFamily = i;
+			}
+
+			VkBool32 presentSupport{false};
+			vkGetPhysicalDeviceSurfaceSupportKHR(device, i, m_Surface, &presentSupport);
+
+			if (presentSupport) {
+				indices.presentFamily = i;
 			}
 
 			if (indices.IsComplete()) {
@@ -302,15 +310,20 @@ namespace vulkat{
 		QueueFamilyIndices indices = FindQueueFamilies(m_PhysicalDevice);
 
 		// Fill the queueCreateInfo struct
-		VkDeviceQueueCreateInfo queueCreateInfo{};
-
-		queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-		queueCreateInfo.queueFamilyIndex = indices.graphicsFamily.value();
-		queueCreateInfo.queueCount = 1;
+		std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
+		std::set<uint32_t> uniqueQueueFamilies = {indices.graphicsFamily.value(), indices.presentFamily.value()};
 
 		// Set the priority of the queue
 		float queuePriority = 1.0f;
-		queueCreateInfo.pQueuePriorities = &queuePriority;
+		for (uint32_t queueFamily : uniqueQueueFamilies) {
+			VkDeviceQueueCreateInfo queueCreateInfo{};
+			queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+			queueCreateInfo.queueFamilyIndex = indices.graphicsFamily.value();
+			queueCreateInfo.queueCount = 1;
+			queueCreateInfo.pQueuePriorities = &queuePriority;
+			queueCreateInfos.push_back(queueCreateInfo);
+		}
+
 
 		// Fill the deviceFeatures struct
 		VkPhysicalDeviceFeatures deviceFeatures{}; // No special features required
@@ -319,8 +332,8 @@ namespace vulkat{
 		VkDeviceCreateInfo createInfo{};
 
 		createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-		createInfo.pQueueCreateInfos = &queueCreateInfo; // Reference the queue create info struct
-		createInfo.queueCreateInfoCount = 1;
+		createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
+		createInfo.pQueueCreateInfos = queueCreateInfos.data(); // Reference the queue create info struct
 		createInfo.pEnabledFeatures = &deviceFeatures; // Reference the device features struct
 		// Depricated but a good idea to add anyway
 		createInfo.enabledExtensionCount = 0; 
@@ -337,8 +350,10 @@ namespace vulkat{
 			throw std::runtime_error("Failed to create logic device!");
 		}
 
-		// Store the device queue
+		// Store the graphics queue
 		vkGetDeviceQueue(m_Device, indices.graphicsFamily.value(), 0, &m_GraphicsQueue); // Only create single queue (0)
+		// Store the presentation queue
+		vkGetDeviceQueue(m_Device, indices.presentFamily.value(), 0, &m_PresentQueue); // idem
 	}
 
 	void Core::CreateSurface() {
