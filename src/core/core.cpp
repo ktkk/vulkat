@@ -134,7 +134,7 @@ namespace vulkat{
 			debug::DestroyDebugUtilsMessengerEXT(m_pInstance, m_pDebugMessenger, nullptr);
 		}
 
-		vkDestroySurfaceKHR(m_pInstance, m_Surface, nullptr);
+		// vkDestroySurfaceKHR(m_pInstance, m_Surface, nullptr);
 		vkDestroyInstance(m_pInstance, nullptr);
 
 		glfwDestroyWindow(m_pWindow);
