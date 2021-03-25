@@ -4,6 +4,7 @@
 
 namespace vulkat {
 	const std::vector<const char*> Validation::m_ValidationLayers{ "VK_LAYER_KHRONOS_validation" };
+	const std::vector<const char*> Validation::m_DeviceExtensions{ VK_KHR_SWAPCHAIN_EXTENSION_NAME };
 
 	bool Validation::CheckValidationLayerSupport() {
 		uint32_t layerCount;

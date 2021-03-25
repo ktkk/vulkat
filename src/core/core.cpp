@@ -1,5 +1,4 @@
 #include "../pch.hpp"
-#include <set>
 #include "core.hpp"
 
 namespace debug {
@@ -265,9 +264,17 @@ namespace vulkat{
 	}
 
 	bool Core::IsDeviceSuitable(VkPhysicalDevice device) {
-		QueueFamilyIndices indices = FindQueueFamilies(device);
+		QueueFamilyIndices indices{ FindQueueFamilies(device) };
 
-		return indices.IsComplete();
+		bool extensionSupported{ CheckDeviceExtensionSupport(device) };
+
+		bool swapChainAdequate{ false };
+		if (extensionSupported) {
+			SwapChainSupportDetails swapChainSupport{ QuerySwapChainSupport(device) };
+			swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
+		}
+
+		return indices.IsComplete() && extensionSupported && swapChainAdequate;
 
 		// Could be extended to fall back on iGPU
 		// Or select based on features
@@ -306,6 +313,22 @@ namespace vulkat{
 		return indices;
 	}
 
+	bool Core::CheckDeviceExtensionSupport(VkPhysicalDevice device) {
+		uint32_t extensionCount;
+		vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
+
+		std::vector<VkExtensionProperties> availableExtensions(extensionCount);
+		vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableExtensions.data());
+
+		std::set<std::string> requiredExtensions(Validation::m_DeviceExtensions.begin(), Validation::m_DeviceExtensions.end());
+
+		for (const auto& extension : availableExtensions) {
+			requiredExtensions.erase(extension.extensionName);
+		}
+
+		return requiredExtensions.empty();
+	}
+
 	void Core::CreateLogicalDevice() {
 		QueueFamilyIndices indices = FindQueueFamilies(m_PhysicalDevice);
 
@@ -336,7 +359,8 @@ namespace vulkat{
 		createInfo.pQueueCreateInfos = queueCreateInfos.data(); // Reference the queue create info struct
 		createInfo.pEnabledFeatures = &deviceFeatures; // Reference the device features struct
 		// Depricated but a good idea to add anyway
-		createInfo.enabledExtensionCount = 0; 
+		createInfo.enabledExtensionCount = static_cast<uint32_t>(Validation::m_DeviceExtensions.size());
+		createInfo.ppEnabledExtensionNames = Validation::m_DeviceExtensions.data();
 		if (m_Debug) {
 			createInfo.enabledLayerCount = static_cast<uint32_t>(Validation::m_ValidationLayers.size());
 			createInfo.ppEnabledLayerNames = Validation::m_ValidationLayers.data();
@@ -360,5 +384,30 @@ namespace vulkat{
 		if (glfwCreateWindowSurface(m_pInstance, m_pWindow, nullptr, &m_Surface) != VK_SUCCESS) {
 			throw std::runtime_error("Failed to create window surface!");
 		}
+	}
+
+	SwapChainSupportDetails Core::QuerySwapChainSupport(VkPhysicalDevice device) {
+		SwapChainSupportDetails details;
+
+		// Query basic surface capabilities
+		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, m_Surface, &details.capabilities);
+
+		// Query the supported surface formats
+		uint32_t formatCount;
+		vkGetPhysicalDeviceSurfaceFormatsKHR(device, m_Surface, &formatCount, nullptr);
+		if (formatCount != 0) {
+			details.formats.resize(formatCount);
+			vkGetPhysicalDeviceSurfaceFormatsKHR(device, m_Surface, &formatCount, details.formats.data());
+		}
+
+		// Query the supported presentation modes
+		uint32_t presentModeCount;
+		vkGetPhysicalDeviceSurfacePresentModesKHR(device, m_Surface, &presentModeCount, nullptr);
+		if (presentModeCount != 0) {
+			details.presentModes.resize(presentModeCount);
+			vkGetPhysicalDeviceSurfacePresentModesKHR(device, m_Surface, &presentModeCount, details.presentModes.data());
+		}
+
+		return details;
 	}
 }

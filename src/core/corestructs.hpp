@@ -18,5 +18,11 @@ namespace vulkat{
 
 		bool IsComplete();
 	};
+
+	struct SwapChainSupportDetails {
+		VkSurfaceCapabilitiesKHR capabilities;
+		std::vector<VkSurfaceFormatKHR> formats;
+		std::vector<VkPresentModeKHR> presentModes;
+	};
 }
 #endif // CORESTRUCTS_HPP

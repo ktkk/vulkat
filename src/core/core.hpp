@@ -65,12 +65,16 @@ namespace vulkat{
 		void PickPhysicalDevice();
 		bool IsDeviceSuitable(VkPhysicalDevice device);
 		QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);
+		bool CheckDeviceExtensionSupport(VkPhysicalDevice device);
 
 		// Logical devices
 		void CreateLogicalDevice();
 
 		// Window Surface
 		void CreateSurface();
+
+		// Swap Chain
+		SwapChainSupportDetails QuerySwapChainSupport(VkPhysicalDevice device);
 	};
 }
 #endif // CORE_HPP
