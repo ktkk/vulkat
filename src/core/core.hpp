@@ -75,6 +75,9 @@ namespace vulkat{
 
 		// Swap Chain
 		SwapChainSupportDetails QuerySwapChainSupport(VkPhysicalDevice device);
+		VkSurfaceFormatKHR ChooseSwapSurfaceFormats(const std::vector<VkSurfaceFormatKHR>& availableFormats);
+		VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
+		VkExtend2D ChooseSwapExtend(const VkSurfaceCapabilitiesKHR& capabilities);
 	};
 }
 #endif // CORE_HPP
