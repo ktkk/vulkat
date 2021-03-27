@@ -16,5 +16,7 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <cstdint>
+#include <algorithm>
 
 #endif // PCH_HPP

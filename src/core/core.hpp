@@ -42,6 +42,10 @@ namespace vulkat{
 		VkDevice m_Device; // Logical device
 		VkQueue m_GraphicsQueue; // Handle to interact with graphics queue
 		VkQueue m_PresentQueue; // Handle to interact with the presentation queue
+		VkSwapchainKHR m_SwapChain; // Swapchain
+		std::vector<VkImage> m_SwapChainImages; // Handle for images in swapchain
+		VkFormat m_SwapChainImageFormat;
+		VkExtent2D m_SwapChainExtent;
 
 		// MEMBER FUNCTIONS
 		void Initialize();
@@ -77,7 +81,8 @@ namespace vulkat{
 		SwapChainSupportDetails QuerySwapChainSupport(VkPhysicalDevice device);
 		VkSurfaceFormatKHR ChooseSwapSurfaceFormats(const std::vector<VkSurfaceFormatKHR>& availableFormats);
 		VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
-		VkExtend2D ChooseSwapExtend(const VkSurfaceCapabilitiesKHR& capabilities);
+		VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
+		void CreateSwapChain();
 	};
 }
 #endif // CORE_HPP
