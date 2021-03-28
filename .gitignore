@@ -1,5 +1,8 @@
 # Ignore the build directory
-/build/*
+build/
+
+# Ignore the vulkansdk directory
+vulkansdk/
 
 # Ignore Precompiled Header
 /src/*.pch
