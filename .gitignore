@@ -5,5 +5,5 @@ build/
 vulkansdk/
 
 # Ignore Precompiled Header
-/src/*.pch
-/src/*.gch
+src/*.pch
+src/*.gch
