@@ -44,6 +44,7 @@ namespace vulkat{
 		VkQueue m_PresentQueue; // Handle to interact with the presentation queue
 		VkSwapchainKHR m_SwapChain; // Swapchain
 		std::vector<VkImage> m_SwapChainImages; // Handle for images in swapchain
+		std::vector<VkImageView> m_SwapChainImageViews;
 		VkFormat m_SwapChainImageFormat;
 		VkExtent2D m_SwapChainExtent;
 
@@ -83,6 +84,9 @@ namespace vulkat{
 		VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
 		VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
 		void CreateSwapChain();
+
+		// Image views
+		void CreateImageViews();
 	};
 }
 #endif // CORE_HPP
