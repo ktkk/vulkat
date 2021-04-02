@@ -87,6 +87,9 @@ namespace vulkat{
 
 		// Image views
 		void CreateImageViews();
+
+		// Graphics pipeline
+		void CreateGraphicsPipeline();
 	};
 }
 #endif // CORE_HPP

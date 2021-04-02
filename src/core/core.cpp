@@ -557,4 +557,8 @@ namespace vulkat{
 			}
 		}
 	}
+
+	void Core::CreateGraphicsPipeline() {
+
+	}
 }
