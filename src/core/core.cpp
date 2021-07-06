@@ -8,7 +8,7 @@ namespace debug {
 		auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
 	
 		// if the function exists, return it, otherwise throw an error
-		if (func != nullptr) {
+		if(func != nullptr) {
 			return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
 		}
 		else {
@@ -22,7 +22,7 @@ namespace debug {
 		auto func = (PFN_vkDestroyDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
 
 		// if the function exists, return it
-		if (func != nullptr) {
+		if(func != nullptr) {
 			func(instance, debugMessenger, pAllocator);
 		}
 	}
@@ -61,7 +61,8 @@ namespace vulkat{
 				m_WindowProperties.height,
 				m_WindowProperties.title.c_str(),
 				nullptr, // not fullscreen
-				nullptr ); // don't share resources with other windows (opengl only)
+				nullptr // don't share resources with other windows (opengl only)
+ 		);
 
 		// Create a vulkan instance
 		CreateInstance();
@@ -74,14 +75,14 @@ namespace vulkat{
 	}
 
 	void Core::Cleanup() {
-		for (auto imageView : m_SwapChainImageViews) {
+		for(auto imageView : m_SwapChainImageViews) {
 			vkDestroyImageView(m_Device, imageView, nullptr);
 		}
 
 		vkDestroySwapchainKHR(m_Device, m_SwapChain, nullptr);
 		vkDestroyDevice(m_Device, nullptr);
 
-		if (m_Debug) {
+		if(m_Debug) {
 			debug::DestroyDebugUtilsMessengerEXT(m_pInstance, m_pDebugMessenger, nullptr);
 		}
 
@@ -93,7 +94,7 @@ namespace vulkat{
 	}
 
 	void Core::CreateInstance() {
-		if (m_Debug && !Validation::CheckValidationLayerSupport()) {
+		if(m_Debug && !Validation::CheckValidationLayerSupport()) {
 			// Check if validation layers are supported
 			throw std::runtime_error("Validation layer requested, but none available!");
 		}
@@ -123,7 +124,7 @@ namespace vulkat{
 		createInfo.ppEnabledExtensionNames = extensions.data();
 
 		VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo;
-		if (m_Debug) {
+		if(m_Debug) {
 			createInfo.enabledLayerCount = static_cast<uint32_t>(Validation::m_ValidationLayers.size());
 			createInfo.ppEnabledLayerNames = Validation::m_ValidationLayers.data();
 
@@ -138,7 +139,7 @@ namespace vulkat{
 		// END CREATEINFO
 
 		// Create the instance
-		if (vkCreateInstance(&createInfo, nullptr, &m_pInstance) != VK_SUCCESS) {
+		if(vkCreateInstance(&createInfo, nullptr, &m_pInstance) != VK_SUCCESS) {
 			// Throw an rte if Instance creation failed
 			throw std::runtime_error("Failed to create VK instance!\n");
 		}
@@ -160,7 +161,7 @@ namespace vulkat{
 		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
 
 		std::cout << "Available extensions:\n";
-		for (const auto& extension : extensions) {
+		for(const auto& extension : extensions) {
 			std::cout << "\t" << extension.extensionName << "\n";
 		}
 	}
@@ -234,7 +235,7 @@ namespace vulkat{
 		PopulateDebugMessengerCreateInfo(createInfo);
 
 		// Initialize the debug messenger
-		if (debug::CreateDebugUtilsMessengerEXT(m_pInstance, &createInfo, nullptr, &m_pDebugMessenger) != VK_SUCCESS) {
+		if(debug::CreateDebugUtilsMessengerEXT(m_pInstance, &createInfo, nullptr, &m_pDebugMessenger) != VK_SUCCESS) {
 			throw std::runtime_error("Failed to set up debug messenger!");
 		}
 	}
@@ -244,7 +245,7 @@ namespace vulkat{
 		vkEnumeratePhysicalDevices(m_pInstance, &deviceCount, nullptr);
 
 		// If no device with vulkan support is found, throw error
-		if (deviceCount <= 0) {
+		if(deviceCount <= 0) {
 			throw std::runtime_error("No GPUs with Vulkan support found!");
 		}
 
@@ -252,22 +253,22 @@ namespace vulkat{
 		std::vector<VkPhysicalDevice> devices(deviceCount);
 		vkEnumeratePhysicalDevices(m_pInstance, &deviceCount, devices.data()); // fill the array
 
-		for (const auto& device : devices) {
-			if (IsDeviceSuitable(device)) {
+		for(const auto& device : devices) {
+			if(IsDeviceSuitable(device)) {
 				m_PhysicalDevice = device;
 				break;
 			}
 		}
 
 		// If no suitable GPU is found, also throw an error
-		if (m_PhysicalDevice == VK_NULL_HANDLE) {
+		if(m_PhysicalDevice == VK_NULL_HANDLE) {
 			throw std::runtime_error("Failed to find a suitable GPU");
 		}
 
 		// Print the chosen device
 		VkPhysicalDeviceProperties deviceProperties;
 		vkGetPhysicalDeviceProperties(m_PhysicalDevice, &deviceProperties);
-		if (m_Debug) std::cout << "Running on physical device: " << deviceProperties.deviceName << std::endl;
+		if(m_Debug) std::cout << "Running on physical device: " << deviceProperties.deviceName << std::endl;
 	}
 
 	bool Core::IsDeviceSuitable(VkPhysicalDevice device) {
@@ -276,7 +277,7 @@ namespace vulkat{
 		bool extensionSupported{ CheckDeviceExtensionSupport(device) };
 
 		bool swapChainAdequate{ false };
-		if (extensionSupported) {
+		if(extensionSupported) {
 			SwapChainSupportDetails swapChainSupport{ QuerySwapChainSupport(device) };
 			swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
 		}
@@ -298,19 +299,19 @@ namespace vulkat{
 
 		// Find a queue family that supports VK_QUEUE_GRAPHICS_BIT
 		int i{0};
-		for (const auto& queueFamily : queueFamilies) {
-			if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
+		for(const auto& queueFamily : queueFamilies) {
+			if(queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
 				indices.graphicsFamily = i;
 			}
 
 			VkBool32 presentSupport{false};
 			vkGetPhysicalDeviceSurfaceSupportKHR(device, i, m_Surface, &presentSupport);
 
-			if (presentSupport) {
+			if(presentSupport) {
 				indices.presentFamily = i;
 			}
 
-			if (indices.IsComplete()) {
+			if(indices.IsComplete()) {
 				break;
 			}
 
@@ -329,7 +330,7 @@ namespace vulkat{
 
 		std::set<std::string> requiredExtensions(Validation::m_DeviceExtensions.begin(), Validation::m_DeviceExtensions.end());
 
-		for (const auto& extension : availableExtensions) {
+		for(const auto& extension : availableExtensions) {
 			requiredExtensions.erase(extension.extensionName);
 		}
 
@@ -345,7 +346,7 @@ namespace vulkat{
 
 		// Set the priority of the queue
 		float queuePriority = 1.0f;
-		for (uint32_t queueFamily : uniqueQueueFamilies) {
+		for(uint32_t queueFamily : uniqueQueueFamilies) {
 			VkDeviceQueueCreateInfo queueCreateInfo{};
 			queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
 			queueCreateInfo.queueFamilyIndex = indices.graphicsFamily.value();
@@ -368,7 +369,7 @@ namespace vulkat{
 		// Depricated but a good idea to add anyway
 		createInfo.enabledExtensionCount = static_cast<uint32_t>(Validation::m_DeviceExtensions.size());
 		createInfo.ppEnabledExtensionNames = Validation::m_DeviceExtensions.data();
-		if (m_Debug) {
+		if(m_Debug) {
 			createInfo.enabledLayerCount = static_cast<uint32_t>(Validation::m_ValidationLayers.size());
 			createInfo.ppEnabledLayerNames = Validation::m_ValidationLayers.data();
 		}
@@ -377,7 +378,7 @@ namespace vulkat{
 		}
 
 		// Create the device
-		if (vkCreateDevice(m_PhysicalDevice, &createInfo, nullptr, &m_Device) != VK_SUCCESS) {
+		if(vkCreateDevice(m_PhysicalDevice, &createInfo, nullptr, &m_Device) != VK_SUCCESS) {
 			throw std::runtime_error("Failed to create logic device!");
 		}
 
@@ -388,7 +389,7 @@ namespace vulkat{
 	}
 
 	void Core::CreateSurface() {
-		if (glfwCreateWindowSurface(m_pInstance, m_pWindow, nullptr, &m_Surface) != VK_SUCCESS) {
+		if(glfwCreateWindowSurface(m_pInstance, m_pWindow, nullptr, &m_Surface) != VK_SUCCESS) {
 			throw std::runtime_error("Failed to create window surface!");
 		}
 	}
@@ -402,7 +403,7 @@ namespace vulkat{
 		// Query the supported surface formats
 		uint32_t formatCount;
 		vkGetPhysicalDeviceSurfaceFormatsKHR(device, m_Surface, &formatCount, nullptr);
-		if (formatCount != 0) {
+		if(formatCount != 0) {
 			details.formats.resize(formatCount);
 			vkGetPhysicalDeviceSurfaceFormatsKHR(device, m_Surface, &formatCount, details.formats.data());
 		}
@@ -410,7 +411,7 @@ namespace vulkat{
 		// Query the supported presentation modes
 		uint32_t presentModeCount;
 		vkGetPhysicalDeviceSurfacePresentModesKHR(device, m_Surface, &presentModeCount, nullptr);
-		if (presentModeCount != 0) {
+		if(presentModeCount != 0) {
 			details.presentModes.resize(presentModeCount);
 			vkGetPhysicalDeviceSurfacePresentModesKHR(device, m_Surface, &presentModeCount, details.presentModes.data());
 		}
@@ -419,8 +420,8 @@ namespace vulkat{
 	}
 
 	VkSurfaceFormatKHR Core::ChooseSwapSurfaceFormats(const std::vector<VkSurfaceFormatKHR>& availableFormats) {
-		for (const auto& availableFormat : availableFormats) {
-			if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB && availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
+		for(const auto& availableFormat : availableFormats) {
+			if(availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB && availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
 				return availableFormat;
 			}
 		}
@@ -431,8 +432,8 @@ namespace vulkat{
 
 	VkPresentModeKHR Core::ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes) {
 		// Prefer triple buffering
-		for (const auto& availablePresentMode : availablePresentModes) {
-			if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
+		for(const auto& availablePresentMode : availablePresentModes) {
+			if(availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
 				return availablePresentMode;
 			}
 		}
@@ -443,8 +444,8 @@ namespace vulkat{
 
 	VkExtent2D Core::ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) {
 		// return the current extend if width is set to special value (when using some window managers)
-		if (capabilities.currentExtent.width != UINT32_MAX) {
-			if (m_Debug) std::cout << "Window manager dictated special size.\n";
+		if(capabilities.currentExtent.width != UINT32_MAX) {
+			if(m_Debug) std::cout << "Window manager dictated special size.\n";
 			return capabilities.currentExtent;
 		}
 		// else, calculate the size
@@ -474,7 +475,7 @@ namespace vulkat{
 
 		// Request one more image than minimum to avoid driver overhead
 		uint32_t imageCount{ swapChainSupport.capabilities.minImageCount + 1 };
-		if (swapChainSupport.capabilities.maxImageCount > 0 && imageCount > swapChainSupport.capabilities.maxImageCount) {
+		if(swapChainSupport.capabilities.maxImageCount > 0 && imageCount > swapChainSupport.capabilities.maxImageCount) {
 			imageCount = swapChainSupport.capabilities.maxImageCount;
 		}
 
@@ -494,7 +495,7 @@ namespace vulkat{
 		uint32_t queueFamilyIndices[] {indices.graphicsFamily.value(), indices.presentFamily.value()};
 
 		// If graphicsFamily & presentFamily differ, images must be explicitly transferred
-		if (indices.graphicsFamily != indices.presentFamily) {
+		if(indices.graphicsFamily != indices.presentFamily) {
 			createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
 			createInfo.queueFamilyIndexCount = 2;
 			createInfo.pQueueFamilyIndices = queueFamilyIndices;
@@ -516,7 +517,7 @@ namespace vulkat{
 		createInfo.oldSwapchain = VK_NULL_HANDLE; // Implemented later
 
 		// Create the swapchain object
-		if (vkCreateSwapchainKHR(m_Device, &createInfo, nullptr, &m_SwapChain) != VK_SUCCESS) {
+		if(vkCreateSwapchainKHR(m_Device, &createInfo, nullptr, &m_SwapChain) != VK_SUCCESS) {
 			throw std::runtime_error("Failed to create swap chain!");
 		}
 
@@ -533,7 +534,7 @@ namespace vulkat{
 		m_SwapChainImageViews.resize(m_SwapChainImages.size());
 
 		// Populate the image views
-		for (size_t i{}; i < m_SwapChainImages.size(); ++i) {
+		for(size_t i{}; i < m_SwapChainImages.size(); ++i) {
 			// Fill the struct
 			VkImageViewCreateInfo createInfo{};
 
@@ -556,7 +557,7 @@ namespace vulkat{
 			createInfo.subresourceRange.layerCount = 1;
 
 			// Create the image view
-			if (vkCreateImageView(m_Device, &createInfo, nullptr, &m_SwapChainImageViews[i]) != VK_SUCCESS) {
+			if(vkCreateImageView(m_Device, &createInfo, nullptr, &m_SwapChainImageViews[i]) != VK_SUCCESS) {
 				throw std::runtime_error("Failed to create image views!");
 			}
 		}
