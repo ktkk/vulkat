@@ -11,15 +11,12 @@ Really need to split this up in different helper classes, way too hard too read 
 - ~~Validation Layers~~
 - ~~Physical devices and queue families~~
 - ~~Logical device and queues~~
-<<<<<<< HEAD
 - ~~Draw to the window~~
 - ~~Swap chain~~
 - ~~Image views~~
-=======
 - ~~Swap chain~~
 - ~~Image views~~
 - Graphics Pipeline
->>>>>>> 0ff7aba7a42e7f8ff3223009ff65f15bfe805e87
 - ...
 
 ### core.hpp

@@ -86,16 +86,11 @@ namespace vulkat{
 		VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
 		void CreateSwapChain();
 
-<<<<<<< HEAD
 		// Image Views
-		void CreateImageViews();
-=======
-		// Image views
 		void CreateImageViews();
 
 		// Graphics pipeline
 		void CreateGraphicsPipeline();
->>>>>>> 0ff7aba7a42e7f8ff3223009ff65f15bfe805e87
 	};
 }
 #endif // CORE_HPP
