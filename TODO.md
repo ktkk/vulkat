@@ -10,9 +10,9 @@
 - ~~Validation Layers~~
 - ~~Physical devices and queue families~~
 - ~~Logical device and queues~~
-- Draw to the window
-- Swap chain
-- Image views
+- ~~Draw to the window~~
+- ~~Swap chain~~
+- ~~Image views~~
 - ...
 
 ### core.hpp
