@@ -44,7 +44,6 @@ namespace vulkat{
 		VkQueue m_PresentQueue; // Handle to interact with the presentation queue
 		VkSwapchainKHR m_SwapChain; // Swapchain
 		std::vector<VkImage> m_SwapChainImages; // Handle for images in swapchain
-		std::vector<VkImageView> m_SwapChainImageViews;
 		VkFormat m_SwapChainImageFormat;
 		VkExtent2D m_SwapChainExtent;
 		std::vector<VkImageView> m_SwapChainImageViews; // Handle for image views in swapchain

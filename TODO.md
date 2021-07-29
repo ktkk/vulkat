@@ -15,7 +15,6 @@ Really need to split this up in different helper classes, way too hard too read 
 - ~~Swap chain~~
 - ~~Image views~~
 - ~~Swap chain~~
-- ~~Image views~~
 - Graphics Pipeline
 - Major code cleanup
 - ...
