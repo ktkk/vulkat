@@ -15,7 +15,7 @@ SRC_DIR = src
 
 OUTPUT = vulkat
 
-SRCS = $(shell find $(SRC_DIR) -name *.cpp)
+SRCS = $(shell find $(SRC_DIR) -name "*.cpp")
 OBJS = $(SRCS:%.cpp=$(BUILD_DIR)/%.o)
 
 PCH_HEADER = $(SRC_DIR)/pch.hpp
