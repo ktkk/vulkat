@@ -7,3 +7,6 @@ vulkansdk/
 # Ignore Precompiled Header
 src/*.pch
 src/*.gch
+
+# Ignore the compiled shaders
+src/shaders/*.spv
