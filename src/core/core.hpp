@@ -13,6 +13,9 @@
 #define VERSION_MINOR 1
 #define VERSION_PATCH 1
 
+// Directories
+#define SHADER(name) "build/src/shaders/" #name
+
 namespace vulkat{
 	class Core final {
 	public:
@@ -35,23 +38,34 @@ namespace vulkat{
 		bool m_Debug;
 
 		GLFWwindow* m_pWindow; // Window to render to
+
 		VkInstance m_pInstance; // Vulkan Instance (is pointer)
 		VkDebugUtilsMessengerEXT m_pDebugMessenger; // Debug Messenger (is pointer)
 		VkSurfaceKHR m_Surface; // Window Surface
+
 		VkPhysicalDevice m_PhysicalDevice; // Physical device (the GPU)
 		VkDevice m_Device; // Logical device
+
 		VkQueue m_GraphicsQueue; // Handle to interact with graphics queue
 		VkQueue m_PresentQueue; // Handle to interact with the presentation queue
+
 		VkSwapchainKHR m_SwapChain; // Swapchain
 		std::vector<VkImage> m_SwapChainImages; // Handle for images in swapchain
 		VkFormat m_SwapChainImageFormat;
 		VkExtent2D m_SwapChainExtent;
 		std::vector<VkImageView> m_SwapChainImageViews; // Handle for image views in swapchain
 
+		VkRenderPass m_RenderPass; // Render pass
+		VkPipelineLayout m_PipelineLayout; // Pipeline layout
+		VkPipeline m_GraphicsPipeline; // Graphics pipeline
+
 		// MEMBER FUNCTIONS
 		void Initialize();
 		void CreateInstance();
 		void Cleanup();
+
+		// Helper functions
+		static std::vector<char> ReadFile(const std::string& filename);
 
 		// Vulkan Extension & Validation layer checks
 		void PrintVulkanExtensions() const;
@@ -88,8 +102,12 @@ namespace vulkat{
 		// Image Views
 		void CreateImageViews();
 
+		// Render pass
+		void CreateRenderPass();
+
 		// Graphics pipeline
 		void CreateGraphicsPipeline();
+		VkShaderModule CreateShaderModule(const std::vector<char>& bytecode);
 	};
 }
 #endif // CORE_HPP
