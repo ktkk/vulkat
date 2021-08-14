@@ -37,6 +37,8 @@ namespace vulkat{
 		const Window m_WindowProperties; // Window properties
 		bool m_Debug;
 
+		static const int m_MaxFramesInFlight;
+
 		GLFWwindow* m_pWindow; // Window to render to
 
 		VkInstance m_pInstance; // Vulkan Instance (is pointer)
@@ -54,18 +56,31 @@ namespace vulkat{
 		VkFormat m_SwapChainImageFormat;
 		VkExtent2D m_SwapChainExtent;
 		std::vector<VkImageView> m_SwapChainImageViews; // Handle for image views in swapchain
+		std::vector<VkFramebuffer> m_SwapChainFramebuffers; // Handle for frame buffers
 
 		VkRenderPass m_RenderPass; // Render pass
 		VkPipelineLayout m_PipelineLayout; // Pipeline layout
 		VkPipeline m_GraphicsPipeline; // Graphics pipeline
 
+		VkCommandPool m_CommandPool; // Command pool
+		std::vector<VkCommandBuffer> m_CommandBuffers;
+
+		std::vector<VkSemaphore> m_ImageAvailableSemaphores;
+		std::vector<VkSemaphore> m_RenderFinishedSemaphores;
+		std::vector<VkFence> m_InFlightFences;
+		std::vector<VkFence> m_ImagesInFlight;
+		size_t m_CurrentFrame;
+
+		bool m_FramebufferResized;
+
 		// MEMBER FUNCTIONS
 		void Initialize();
-		void CreateInstance();
+		// void Run();
 		void Cleanup();
 
 		// Helper functions
-		static std::vector<char> ReadFile(const std::string& filename);
+		static std::vector<char> ReadFile(const std::string& filename, bool debug);
+		static void FramebufferResizeCallback(GLFWwindow* window, int width, int height);
 
 		// Vulkan Extension & Validation layer checks
 		void PrintVulkanExtensions() const;
@@ -75,6 +90,9 @@ namespace vulkat{
 			VkDebugUtilsMessageTypeFlagsEXT messageType,
 			const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
 			void* pUserData);
+
+		// Vulkan instance
+		void CreateInstance();
 
 		// Debug messenger
 		void PopulateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
@@ -108,6 +126,23 @@ namespace vulkat{
 		// Graphics pipeline
 		void CreateGraphicsPipeline();
 		VkShaderModule CreateShaderModule(const std::vector<char>& bytecode);
+
+		// Framebuffers
+		void CreateFramebuffers();
+
+		// Command pool
+		void CreateCommandPool();
+		void CreateCommandBuffers();
+
+		// Signaling Objects
+		void CreateSyncObjects();
+
+		// Draw frame
+		void DrawFrame();
+
+		// Recreate the swapchain
+		void RecreateSwapChain();
+		void CleanupSwapChain();
 	};
 }
 #endif // CORE_HPP
