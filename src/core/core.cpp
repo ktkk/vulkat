@@ -6,7 +6,7 @@ namespace debug {
 	VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger) {
 		// Look for the address of the function
 		auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
-	
+
 		// if the function exists, return it, otherwise throw an error
 		if(func != nullptr) {
 			return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
