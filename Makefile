@@ -23,7 +23,7 @@ SHADER_DIR=$(shell find $(SRC_DIR) -type d -name "shaders")
 PCH_HEADER=$(SRC_DIR)/pch.hpp
 PCH=$(PCH_HEADER).gch
 
-all: $(BUILD_DIR)/$(OUTPUT) shaders
+all: $(BUILD_DIR)/$(OUTPUT)
 
 $(BUILD_DIR)/$(OUTPUT): $(OBJS)
 	@tput setaf 1 ; echo -e "Building output" ; tput sgr0
@@ -38,14 +38,14 @@ $(BUILD_DIR)/%.o: %.cpp $(PCH)
 	mkdir -p $(dir $@)
 	$(CC) $(CPPFLAGS) -include $(PCH_HEADER) -c $< -o $@
 
-.PHONY: test clean
+.PHONY: test clean shaders
 
 shaders:
 	@tput setaf 1 ; echo -e "Building shaders" ; tput sgr0
 	$(MAKE) -C $(SHADER_DIR)
 
-test: all
-	$(BUILD_DIR)/$(OUTPUT) -d
+test: $(BUILD_DIR)/$(OUTPUT) shaders
+	$< -d
 
 clean:
 	rm -rf $(BUILD_DIR)
