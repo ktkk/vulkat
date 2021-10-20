@@ -1,4 +1,4 @@
-UNAME = $(shell uname -s)
+UNAME=$(shell uname -s)
 ifeq ($(UNAME),Linux)
 	CC=gcc
 	CPPFLAGS=-std=c++17 -O2 -x c++ -g
