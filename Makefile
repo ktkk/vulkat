@@ -1,19 +1,19 @@
 UNAME = $(shell uname -s)
 ifeq ($(UNAME),Linux)
-	CC = gcc
-	CPPFLAGS = -std=c++17 -O2 -xc++ -g
-	LDFLAGS = -lglfw -lvulkan -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi -lstdc++ -shared-libgcc
+	CC=gcc
+	CPPFLAGS=-std=c++17 -O2 -x c++ -g
+	LDFLAGS=-lglfw -lvulkan -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi -lstdc++ -shared-libgcc
 endif
 ifeq ($(UNAME),Darwin)
-	CC = /usr/local/Cellar/gcc/10.2.0_4/bin/gcc-10 # use gnu gcc instead of mac alias to clang
-	CPPFLAGS = -std=c++17 -O2 -xc++ -g -I/usr/local/include
-	LDFLAGS = -L/usr/local/lib -lglfw -lvulkan -ldl -lpthread -lstdc++ -shared-libgcc
+	CC=/usr/local/Cellar/gcc/10.2.0_4/bin/gcc-10 # use gnu gcc instead of mac alias to clang
+	CPPFLAGS=-std=c++17 -O2 -x c++ -g -I/usr/local/include
+	LDFLAGS=-L/usr/local/lib -lglfw -lvulkan -ldl -lpthread -lstdc++ -shared-libgcc
 endif
 
-BUILD_DIR = build
-SRC_DIR = src
+BUILD_DIR=build
+SRC_DIR=src
 
-OUTPUT = vulkat
+OUTPUT=vulkat
 
 SRCS=$(shell find $(SRC_DIR) -name "*.cpp")
 OBJS=$(SRCS:%.cpp=$(BUILD_DIR)/%.o)
