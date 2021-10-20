@@ -15,11 +15,15 @@ SRC_DIR = src
 
 OUTPUT = vulkat
 
-SRCS = $(shell find $(SRC_DIR) -name "*.cpp")
-OBJS = $(SRCS:%.cpp=$(BUILD_DIR)/%.o)
+SRCS=$(shell find $(SRC_DIR) -name "*.cpp")
+OBJS=$(SRCS:%.cpp=$(BUILD_DIR)/%.o)
 
-PCH_HEADER = $(SRC_DIR)/pch.hpp
-PCH = $(PCH_HEADER).gch
+SHADER_DIR=$(shell find $(SRC_DIR) -type d -name "shaders")
+
+PCH_HEADER=$(SRC_DIR)/pch.hpp
+PCH=$(PCH_HEADER).gch
+
+all: $(BUILD_DIR)/$(OUTPUT) shaders
 
 $(BUILD_DIR)/$(OUTPUT): $(OBJS)
 	@tput setaf 1 ; echo -e "Building output" ; tput sgr0
@@ -36,8 +40,11 @@ $(BUILD_DIR)/%.o: %.cpp $(PCH)
 
 .PHONY: test clean
 
-test: $(BUILD_DIR)/$(OUTPUT)
-	$< -d
+shaders:
+	$(MAKE) -C $(SHADER_DIR)
+
+test: all
+	$(BUILD_DIR)/$(OUTPUT) -d
 
 clean:
 	rm -rf $(BUILD_DIR)
