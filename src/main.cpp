@@ -37,7 +37,8 @@ int main(int argc, char* argv[]){
 
 	try {
 		pCore->Run(); // Run the game loop
-	} catch (const std::exception& e) {
+	}
+	catch (const std::exception& e) {
 		std::cerr << "Exception caught: '" << e.what() << "'/n";
 		return EXIT_FAILURE;
 	}
