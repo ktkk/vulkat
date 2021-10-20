@@ -41,6 +41,7 @@ $(BUILD_DIR)/%.o: %.cpp $(PCH)
 .PHONY: test clean
 
 shaders:
+	@tput setaf 1 ; echo -e "Building shaders" ; tput sgr0
 	$(MAKE) -C $(SHADER_DIR)
 
 test: all
