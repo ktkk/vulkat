@@ -2,6 +2,9 @@
 #define CORESTRUCTS_HPP
 
 #include <optional> // c++17 data structure to distinguish between the case of a value existing or not
+#include <array> // Std array for easier returning from functions
+
+#include <glm/glm.hpp>
 
 namespace vulkat{
 	struct Window {
@@ -10,6 +13,14 @@ namespace vulkat{
 		std::string title;
 		float width, height;
 		bool isVsyncOn;
+	};
+
+	struct Vertex {
+		glm::vec2 pos;
+		glm::vec3 color;
+
+		static VkVertexInputBindingDescription GetBindingDescription();
+		static std::array<VkVertexInputAttributeDescription, 2> GetAttributeDescription();
 	};
 
 	struct QueueFamilyIndices {
