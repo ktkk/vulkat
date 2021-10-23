@@ -29,6 +29,7 @@ namespace debug {
 }
 
 namespace vulkat{
+	// Temp vertex vector
 	const std::vector<Vertex> vertices{
 		{{ 0.0f, -0.5f }, { 1.0f, 0.0f, 0.0f }},
 		{{ 0.5f, 0.5f }, { 0.0f, 1.0f, 0.0f }},
@@ -98,6 +99,7 @@ namespace vulkat{
 		CreateGraphicsPipeline();
 		CreateFramebuffers();
 		CreateCommandPool();
+		CreateVertexBuffer();
 		CreateCommandBuffers();
 
 		CreateSyncObjects();
@@ -107,6 +109,9 @@ namespace vulkat{
 		// Clean up Vulkan objects
 
 		CleanupSwapChain();
+
+		// Destroy vertex buffer
+		vkDestroyBuffer(m_Device, m_VertexBuffer, nullptr);
 
 		// Destroy semaphores and fences
 		for(size_t i{}; i < m_MaxFramesInFlight; ++i){
@@ -994,6 +999,37 @@ namespace vulkat{
 		if(vkCreateCommandPool(m_Device, &poolInfo, nullptr, &m_CommandPool) != VK_SUCCESS) {
 			throw std::runtime_error("Failed to create command pool!");
 		}
+	}
+
+	uint32_t Core::FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
+		VkPhysicalDeviceMemoryProperties memProperties;
+		vkGetPhysicalDeviceMemoryProperties(m_PhysicalDevice, &memProperties);
+
+		for(uint32_t i{}; i < memProperties.memoryTypeCount; ++i) {
+			// Find idx of suitable memory type by iterating over them and checking if corresponding bit is set
+			// Additionally, check memoryTypes for memory with specified properties
+			if(typeFilter & (1 << i) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties) {
+				return i;
+			}
+		}
+
+		throw std::runtime_error("Failed to find suitable memory type!");
+	}
+
+	void Core::CreateVertexBuffer() {
+		VkBufferCreateInfo bufferInfo{};
+
+		bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+		bufferInfo.size = sizeof(vertices[0]) * vertices.size();
+		bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+		bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+		if(vkCreateBuffer(m_Device, &bufferInfo, nullptr, &m_VertexBuffer) != VK_SUCCESS) {
+			throw std::runtime_error("Failed to create vertex buffer!");
+		}
+
+		VkMemoryRequirements memRequirements;
+		vkGetBufferMemoryRequirements(m_Device, m_VertexBuffer, &memRequirements);
 	}
 
 	void Core::CreateCommandBuffers() {

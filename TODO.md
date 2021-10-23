@@ -16,7 +16,10 @@ Really need to split this up in different helper classes, way too hard too read 
 - ~~Image views~~
 - ~~Swap chain~~
 - ~~Graphics Pipeline~~
-- Drawing
+- ~~Drawing~~
+- Vertex buffers
+* Vertex buffer creation
+-- Memory allocation
 - Major code cleanup
 - ...
 

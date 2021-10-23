@@ -20,7 +20,7 @@ namespace vulkat{
 	class Core final {
 	public:
 		explicit Core(const Window& window, bool debug);
-		
+
 		// Disallow copy
 		Core(const Core& other) = delete; // Copy constructor
 		Core(Core&& other) = delete; // Move constructor
@@ -63,7 +63,10 @@ namespace vulkat{
 		VkPipeline m_GraphicsPipeline; // Graphics pipeline
 
 		VkCommandPool m_CommandPool; // Command pool
-		std::vector<VkCommandBuffer> m_CommandBuffers;
+
+		VkBuffer m_VertexBuffer; // Vertex buffer
+
+		std::vector<VkCommandBuffer> m_CommandBuffers; // Commandbuffers
 
 		std::vector<VkSemaphore> m_ImageAvailableSemaphores;
 		std::vector<VkSemaphore> m_RenderFinishedSemaphores;
@@ -132,6 +135,12 @@ namespace vulkat{
 
 		// Command pool
 		void CreateCommandPool();
+
+		// Vertex buffer
+		uint32_t FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
+		void CreateVertexBuffer();
+
+		// Commandbuffers
 		void CreateCommandBuffers();
 
 		// Signaling Objects
