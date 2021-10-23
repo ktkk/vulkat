@@ -29,6 +29,12 @@ namespace debug {
 }
 
 namespace vulkat{
+	const std::vector<Vertex> vertices{
+		{{ 0.0f, -0.5f }, { 1.0f, 0.0f, 0.0f }},
+		{{ 0.5f, 0.5f }, { 0.0f, 1.0f, 0.0f }},
+		{{ -0.5f, 0.5f }, { 0.0f, 0.0f, 1.0f }}
+	};
+
 	const int Core::m_MaxFramesInFlight{ 2 };
 
 	// Public functions
@@ -296,7 +302,7 @@ namespace vulkat{
 		VkInstanceCreateInfo createInfo{};
 		createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 		createInfo.pApplicationInfo = &appInfo;
-		
+
 		auto extensions = GetRequiredExtensions();
 		createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
 		createInfo.ppEnabledExtensionNames = extensions.data();
@@ -810,13 +816,16 @@ namespace vulkat{
 
 		VkPipelineShaderStageCreateInfo shaderStages[]{ vertShaderStageInfo, fragShaderStageInfo };
 
+		auto bindingDescription = Vertex::GetBindingDescription();
+		auto attributeDescription = Vertex::GetAttributeDescription();
+
 		VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
 
 		vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-		vertexInputInfo.vertexBindingDescriptionCount = 0;
-		vertexInputInfo.pVertexBindingDescriptions = nullptr;
-		vertexInputInfo.vertexAttributeDescriptionCount = 0;
-		vertexInputInfo.pVertexAttributeDescriptions = nullptr;
+		vertexInputInfo.vertexBindingDescriptionCount = 1;
+		vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
+		vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescription.size());;
+		vertexInputInfo.pVertexAttributeDescriptions = attributeDescription.data();
 
 		VkPipelineInputAssemblyStateCreateInfo inputAssemplyInfo{};
 
