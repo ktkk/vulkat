@@ -17,6 +17,7 @@
 #include <vector>
 #include <set>
 #include <cstdint>
+#include <cstring>
 #include <algorithm>
 #include <fstream>
 

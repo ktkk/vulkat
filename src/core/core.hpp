@@ -65,9 +65,11 @@ namespace vulkat{
 		VkCommandPool m_CommandPool; // Command pool
 
 		VkBuffer m_VertexBuffer; // Vertex buffer
+		VkDeviceMemory m_VertexBufferMemory; // Vertex buffer on gpu
 
 		std::vector<VkCommandBuffer> m_CommandBuffers; // Commandbuffers
 
+		// Semaphores & Fences
 		std::vector<VkSemaphore> m_ImageAvailableSemaphores;
 		std::vector<VkSemaphore> m_RenderFinishedSemaphores;
 		std::vector<VkFence> m_InFlightFences;
@@ -84,6 +86,7 @@ namespace vulkat{
 		// Helper functions
 		static std::vector<char> ReadFile(const std::string& filename, bool debug);
 		static void FramebufferResizeCallback(GLFWwindow* window, int width, int height);
+		uint32_t FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
 
 		// Vulkan Extension & Validation layer checks
 		void PrintVulkanExtensions() const;
@@ -137,7 +140,6 @@ namespace vulkat{
 		void CreateCommandPool();
 
 		// Vertex buffer
-		uint32_t FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
 		void CreateVertexBuffer();
 
 		// Commandbuffers
