@@ -1,0 +1,97 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-std=c++17",
+      "-O2",
+      "-x",
+      "c++",
+      "-g",
+      "-include",
+      "src/pch.hpp",
+      "-c",
+      "-o",
+      "build/src/main.o",
+      "src/main.cpp"
+    ],
+    "directory": "/home/katkak/Projects/vulkat",
+    "file": "/home/katkak/Projects/vulkat/src/main.cpp",
+    "output": "/home/katkak/Projects/vulkat/build/src/main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-std=c++17",
+      "-O2",
+      "-x",
+      "c++",
+      "-g",
+      "-include",
+      "src/pch.hpp",
+      "-c",
+      "-o",
+      "build/src/game/game.o",
+      "src/game/game.cpp"
+    ],
+    "directory": "/home/katkak/Projects/vulkat",
+    "file": "/home/katkak/Projects/vulkat/src/game/game.cpp",
+    "output": "/home/katkak/Projects/vulkat/build/src/game/game.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-std=c++17",
+      "-O2",
+      "-x",
+      "c++",
+      "-g",
+      "-include",
+      "src/pch.hpp",
+      "-c",
+      "-o",
+      "build/src/core/core.o",
+      "src/core/core.cpp"
+    ],
+    "directory": "/home/katkak/Projects/vulkat",
+    "file": "/home/katkak/Projects/vulkat/src/core/core.cpp",
+    "output": "/home/katkak/Projects/vulkat/build/src/core/core.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-std=c++17",
+      "-O2",
+      "-x",
+      "c++",
+      "-g",
+      "-include",
+      "src/pch.hpp",
+      "-c",
+      "-o",
+      "build/src/core/validation.o",
+      "src/core/validation.cpp"
+    ],
+    "directory": "/home/katkak/Projects/vulkat",
+    "file": "/home/katkak/Projects/vulkat/src/core/validation.cpp",
+    "output": "/home/katkak/Projects/vulkat/build/src/core/validation.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-std=c++17",
+      "-O2",
+      "-x",
+      "c++",
+      "-g",
+      "-include",
+      "src/pch.hpp",
+      "-c",
+      "-o",
+      "build/src/core/corestructs.o",
+      "src/core/corestructs.cpp"
+    ],
+    "directory": "/home/katkak/Projects/vulkat",
+    "file": "/home/katkak/Projects/vulkat/src/core/corestructs.cpp",
+    "output": "/home/katkak/Projects/vulkat/build/src/core/corestructs.o"
+  }
+]
