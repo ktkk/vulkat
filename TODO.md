@@ -18,8 +18,7 @@ Really need to split this up in different helper classes, way too hard too read 
 - ~~Graphics Pipeline~~
 - ~~Drawing~~
 - Vertex buffers
-* Vertex buffer creation
--- Memory allocation
+* Index buffer
 - Major code cleanup
 - ...
 

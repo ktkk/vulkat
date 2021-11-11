@@ -6,6 +6,7 @@
 
 // Validation Layers
 #include "validation.hpp"
+#include <vulkan/vulkan_core.h>
 
 // vulkat
 #define ENGINE "vulkat"
@@ -139,7 +140,9 @@ namespace vulkat{
 		// Command pool
 		void CreateCommandPool();
 
-		// Vertex buffer
+		// Buffer
+		void CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
+		void CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 		void CreateVertexBuffer();
 
 		// Commandbuffers
