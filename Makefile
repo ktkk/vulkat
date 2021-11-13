@@ -38,11 +38,14 @@ $(BUILD_DIR)/%.o: %.cpp $(PCH)
 	mkdir -p $(dir $@)
 	$(CC) $(CPPFLAGS) -include $(PCH_HEADER) -c $< -o $@
 
-.PHONY: test clean shaders
+.PHONY: shaders clangd test clean
 
 shaders:
 	@tput setaf 1 ; echo -e "Building shaders" ; tput sgr0
 	$(MAKE) -C $(SHADER_DIR)
+
+clangd: clean
+	bear -- make
 
 test: $(BUILD_DIR)/$(OUTPUT) shaders
 	$< -d

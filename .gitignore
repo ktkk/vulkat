@@ -11,5 +11,6 @@ src/*.gch
 # Ignore the compiled shaders
 src/shaders/*.spv
 
-# Ignore clangd cache
+# Ignore clangd
 .cache
+compile_commands.json
