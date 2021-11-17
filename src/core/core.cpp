@@ -32,9 +32,15 @@ namespace debug {
 namespace vulkat{
 	// Temp vertex vector
 	const std::vector<Vertex> vertices{
-		{{ 0.0f, -0.5f }, { 1.0f, 0.0f, 0.0f }},
-		{{ 0.5f, 0.5f }, { 0.0f, 1.0f, 0.0f }},
-		{{ -0.5f, 0.5f }, { 0.0f, 0.0f, 1.0f }}
+		{{ -0.5f, -0.5f }, { 1.0f, 0.0f, 0.0f }},
+		{{ 0.5f, -0.5f }, { 0.0f, 1.0f, 0.0f }},
+		{{ 0.5f, 0.5f }, { 0.0f, 0.0f, 1.0f }},
+		{{ -0.5f, 0.5f }, { 1.0f, 1.0f, 1.0f }},
+	};
+
+	// Temp index buffer
+	const std::vector<uint16_t> indices{
+		0, 1, 2, 2, 3, 0
 	};
 
 	const int Core::m_MaxFramesInFlight{ 2 };
@@ -101,6 +107,7 @@ namespace vulkat{
 		CreateFramebuffers();
 		CreateCommandPool();
 		CreateVertexBuffer();
+		CreateIndexBuffer();
 		CreateCommandBuffers();
 
 		CreateSyncObjects();
@@ -110,6 +117,10 @@ namespace vulkat{
 		// Clean up Vulkan objects
 
 		CleanupSwapChain();
+
+		// Destroy index buffer
+		vkDestroyBuffer(m_Device, m_IndexBuffer, nullptr);
+		vkFreeMemory(m_Device, m_IndexBufferMemory, nullptr);
 
 		// Destroy vertex buffer
 		vkDestroyBuffer(m_Device, m_VertexBuffer, nullptr);
@@ -801,10 +812,10 @@ namespace vulkat{
 		colorBlendingInfo.logicOp = VK_LOGIC_OP_COPY;
 		colorBlendingInfo.attachmentCount = 1;
 		colorBlendingInfo.pAttachments = &colorBlendAttachment;
+		colorBlendingInfo.blendConstants[0] = 0.0f;
 		colorBlendingInfo.blendConstants[1] = 0.0f;
 		colorBlendingInfo.blendConstants[2] = 0.0f;
 		colorBlendingInfo.blendConstants[3] = 0.0f;
-		colorBlendingInfo.blendConstants[4] = 0.0f;
 
 		VkDynamicState dynamicStates[] = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_LINE_WIDTH };
 
@@ -991,6 +1002,27 @@ namespace vulkat{
 		vkFreeMemory(m_Device, stagingBufferMemory, nullptr);
 	}
 
+	void Core::CreateIndexBuffer() {
+		VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
+
+		VkBuffer stagingBuffer;
+		VkDeviceMemory stagingBufferMemory;
+
+		CreateBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
+
+		void* data;
+		vkMapMemory(m_Device, stagingBufferMemory, 0, bufferSize, 0, &data);
+		memcpy(data, indices.data(), size_t(bufferSize));
+		vkUnmapMemory(m_Device, stagingBufferMemory);
+
+		CreateBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_IndexBuffer, m_IndexBufferMemory);
+
+		CopyBuffer(stagingBuffer, m_IndexBuffer, bufferSize);
+
+		vkDestroyBuffer(m_Device, stagingBuffer, nullptr);
+		vkFreeMemory(m_Device, stagingBufferMemory, nullptr);
+	}
+
 	void Core::CreateCommandBuffers() {
 		m_CommandBuffers.resize(m_SwapChainFramebuffers.size());
 
@@ -1034,12 +1066,15 @@ namespace vulkat{
 			VkDeviceSize offsets[]{ 0 };
 			vkCmdBindVertexBuffers(m_CommandBuffers[i], 0, 1, vertexBuffers, offsets);
 
+			vkCmdBindIndexBuffer(m_CommandBuffers[i], m_IndexBuffer, 0, VK_INDEX_TYPE_UINT16);
+
 			// Draw command
 			// 2nd param: vertexcount
 			// 3rd param: instanceCount
 			// 4th param: firstVertex
 			// 5th param: firstInstance
-			vkCmdDraw(m_CommandBuffers[i], static_cast<uint32_t>(vertices.size()), 1, 0, 0);
+			//vkCmdDraw(m_CommandBuffers[i], static_cast<uint32_t>(vertices.size()), 1, 0, 0);
+			vkCmdDrawIndexed(m_CommandBuffers[i], static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
 			// End
 
 			vkCmdEndRenderPass(m_CommandBuffers[i]);

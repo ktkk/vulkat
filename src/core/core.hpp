@@ -67,6 +67,9 @@ namespace vulkat{
 
 		VkBuffer m_VertexBuffer; // Vertex buffer
 		VkDeviceMemory m_VertexBufferMemory; // Vertex buffer on gpu
+		VkBuffer m_IndexBuffer; // Index buffer
+		VkDeviceMemory m_IndexBufferMemory; // Index buffer on gpu
+
 
 		std::vector<VkCommandBuffer> m_CommandBuffers; // Commandbuffers
 
@@ -140,10 +143,12 @@ namespace vulkat{
 		// Command pool
 		void CreateCommandPool();
 
-		// Buffer
+		// Buffers
 		void CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
 		void CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 		void CreateVertexBuffer();
+		void CreateIndexBuffer();
+		// TODO(ktkk): Abstract these away into a single generic function (http://disq.us/p/1tufbax)
 
 		// Commandbuffers
 		void CreateCommandBuffers();
