@@ -17,8 +17,7 @@ Really need to split this up in different helper classes, way too hard too read 
 - ~~Swap chain~~
 - ~~Graphics Pipeline~~
 - ~~Drawing~~
-- Vertex buffers
-* Index buffer
+- ~~Vertex buffers~~
 - Major code cleanup
 - ...
 

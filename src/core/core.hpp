@@ -91,6 +91,8 @@ namespace vulkat{
 		static std::vector<char> ReadFile(const std::string& filename, bool debug);
 		static void FramebufferResizeCallback(GLFWwindow* window, int width, int height);
 		uint32_t FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
+		void CreateVkBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
+		void CopyVkBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 
 		// Vulkan Extension & Validation layer checks
 		void PrintVulkanExtensions() const;
@@ -144,11 +146,8 @@ namespace vulkat{
 		void CreateCommandPool();
 
 		// Buffers
-		void CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
-		void CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
-		void CreateVertexBuffer();
-		void CreateIndexBuffer();
-		// TODO(ktkk): Abstract these away into a single generic function (http://disq.us/p/1tufbax)
+		template<typename T>
+		void CreateBuffer(const std::vector<T>& data, VkBuffer& buffer, VkDeviceMemory& bufferMemory, VkBufferUsageFlags usage);
 
 		// Commandbuffers
 		void CreateCommandBuffers();
